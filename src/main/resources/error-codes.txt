@@ -1,0 +1,44 @@
+======================
+ Business Rule Violation (B)
+
+    B-001: Error en datos de entrada. Campos con valores incorrectos.
+    B-002: Error en datos de entrada. Campos obligatorios faltantes o vacíos.
+
+======================
+ Invalid Input Data (V)
+
+
+======================
+ Unauthorized Access (A)
+
+
+======================
+ Authentication Required (AU)
+
+
+======================
+ Resource Not Found (R)
+
+    R-001: Recurso no encontrado. Path no válido.
+    R-002: Método no soportado. Método HTTP inválido.
+    R-003: Alumno no encontrado. Eliminación de un alumno inexistente.
+
+======================
+ Database Transaction Error (D)
+
+
+======================
+ Internal Server Error (I)
+
+    I-001: Error interno en el servidor.
+
+======================
+ External Service Unavailable (E)
+
+
+======================
+ Rate Limit Exceeded (RL)
+
+
+======================
+ Invalid System Configuration (C)
