@@ -3,33 +3,33 @@ package com.sicei.app.sicei.service;
 import com.sicei.app.sicei.exception.BusinessException;
 import com.sicei.app.sicei.exception.RequestException;
 import com.sicei.app.sicei.model.Alumno;
+import com.sicei.app.sicei.repository.AlumnoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AlumnoService {
 
-    private List<Alumno> alumnos = new ArrayList<>();
+    private final AlumnoRepository alumnoRepository;
+
+    public AlumnoService(AlumnoRepository alumnoRepository) {
+        this.alumnoRepository = alumnoRepository;
+    }
 
     public List<Alumno> getAllAlumnos() {
-        return alumnos;
+        return alumnoRepository.findAll();
     }
 
     public Alumno getAlumnoById(Long id) {
-        return alumnos.stream()
-                .filter(alumno -> alumno.getId().equals(id))
-                .findFirst()
+        return alumnoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Alumno no encontrado", "R-003", HttpStatus.NOT_FOUND));
     }
 
     public Alumno saveAlumno(Alumno alumno) {
         validateAlumno(alumno);
-        alumnos.add(alumno);
-        return alumno;
+        return alumnoRepository.save(alumno);
     }
 
     public Alumno updateAlumno(Long id, Alumno alumno) {
@@ -39,12 +39,12 @@ public class AlumnoService {
         existingAlumno.setApellidos(alumno.getApellidos());
         existingAlumno.setMatricula(alumno.getMatricula());
         existingAlumno.setPromedio(alumno.getPromedio());
-        return existingAlumno;
+        return alumnoRepository.save(existingAlumno);
     }
 
     public void deleteAlumno(Long id) {
         Alumno alumno = getAlumnoById(id);
-        alumnos.remove(alumno);
+        alumnoRepository.delete(alumno);
     }
 
     private void validateAlumno(Alumno alumno) {

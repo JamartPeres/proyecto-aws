@@ -3,33 +3,33 @@ package com.sicei.app.sicei.service;
 import com.sicei.app.sicei.exception.BusinessException;
 import com.sicei.app.sicei.exception.RequestException;
 import com.sicei.app.sicei.model.Profesor;
+import com.sicei.app.sicei.repository.ProfesorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProfesorService {
 
-    private List<Profesor> profesores = new ArrayList<>();
+    private final ProfesorRepository profesorRepository;
+
+    public ProfesorService(ProfesorRepository profesorRepository) {
+        this.profesorRepository = profesorRepository;
+    }
 
     public List<Profesor> getAllProfesores() {
-        return profesores;
+        return profesorRepository.findAll();
     }
 
     public Profesor getProfesorById(Long id) {
-        return profesores.stream()
-                .filter(profesor -> profesor.getId().equals(id))
-                .findFirst()
+        return profesorRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Profesor no encontrado", "R-003", HttpStatus.NOT_FOUND));
     }
 
     public Profesor saveProfesor(Profesor profesor) {
         validateProfesor(profesor);
-        profesores.add(profesor);
-        return profesor;
+        return profesorRepository.save(profesor);
     }
 
     public Profesor updateProfesor(Long id, Profesor profesor) {
@@ -39,12 +39,12 @@ public class ProfesorService {
         existingProfesor.setNombres(profesor.getNombres());
         existingProfesor.setApellidos(profesor.getApellidos());
         existingProfesor.setHorasClase(profesor.getHorasClase());
-        return existingProfesor;
+        return profesorRepository.save(existingProfesor);
     }
 
     public void deleteProfesor(Long id) {
         Profesor profesor = getProfesorById(id);
-        profesores.remove(profesor);
+        profesorRepository.delete(profesor);
     }
 
     private void validateProfesor(Profesor profesor) {
